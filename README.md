@@ -2,7 +2,7 @@
 
 Creator media kit for [@galelagja1](https://www.instagram.com/galelagja1/) on Instagram: Bollywood song reels.
 
-Live: https://prayaspradzzy.github.io/galelagja/
+Live: https://galelagjao.vercel.app/
 
 ## Updating the page
 
