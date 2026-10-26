@@ -1,6 +1,6 @@
 # galelagja
 
-Creator media kit for [@galelagja1](https://www.instagram.com/galelagja1/) on Instagram: Bollywood song reels.
+Portfolio for [@galelagja1](https://www.instagram.com/galelagja1/) on Instagram: Bollywood song reels.
 
 Live: https://galelagjao.vercel.app/
 
