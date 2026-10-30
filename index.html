@@ -11,743 +11,525 @@
 <meta property="og:url" content="https://galelagja.vercel.app/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#14100d">
+<meta name="theme-color" content="#F6DCD6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Rozha+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..100,400..700&family=Eczar:wght@500..800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #14100d;
-    --bg-2: #1a1410;
-    --card: #211a15;
-    --card-2: #2a211b;
-    --line: rgba(243, 233, 216, .10);
-    --line-2: rgba(243, 233, 216, .18);
-    --ink: #f3e9d8;
-    --ink-2: #cbbca6;
-    --ink-3: #958671;
-    --accent: #f2a93b;
-    --accent-ink: #1a1209;
-    --rose: #e9576a;
-    --radius: 18px;
-    --maxw: 1160px;
-    --gutter: 24px;
-    --display: "Rozha One", Georgia, serif;
-    --sans: "DM Sans", system-ui, sans-serif;
-    --mono: "DM Mono", ui-monospace, monospace;
-    /* motion */
+    --paper: #F6DCD6;
+    --paper-2: #EEC6BE;
+    --ink: #262063;
+    --ink-2: #514880;
+    --marigold: #F4A21A;
+    --rule: rgba(38, 32, 99, .2);
+    --maxw: 1200px;
+    --gutter: 32px;
+    --display: "Eczar", Georgia, serif;
+    --text: "Anek Latin", system-ui, sans-serif;
     --ease: cubic-bezier(.2, .8, .2, 1);
-    --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
-    --fast: .18s;
-    --med: .32s;
+    /* poster lettering: the second ink stepped out behind the first */
+    --extrude:
+      .008em .008em 0 var(--marigold), .016em .016em 0 var(--marigold), .024em .024em 0 var(--marigold),
+      .032em .032em 0 var(--marigold), .04em .04em 0 var(--marigold), .048em .048em 0 var(--marigold);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   body {
-    background:
-      radial-gradient(60% 40% at 80% 0%, rgba(242, 169, 59, .13), transparent 70%),
-      radial-gradient(40% 30% at 0% 30%, rgba(233, 87, 106, .08), transparent 70%),
-      var(--bg);
+    background: var(--paper);
     color: var(--ink);
-    font-family: var(--sans);
-    font-size: 17px;
-    line-height: 1.55;
+    font: 400 18px/1.5 var(--text);
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-  /* film grain */
-  body::before {
-    content: "";
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 100;
-    opacity: .07;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    overflow-x: clip;
   }
   img { display: block; max-width: 100%; }
-  a { color: inherit; text-decoration: none; }
+  a { color: inherit; }
   a, button { -webkit-tap-highlight-color: transparent; }
+  ul, ol { list-style: none; }
   .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
-  .mono { font-family: var(--mono); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  h2 { font: 700 clamp(36px, 4.6vw, 60px)/1.08 var(--display); letter-spacing: -.01em; max-width: 15em; text-wrap: balance; }
+  h3 { font: 600 24px/1.2 var(--display); }
+
+  /* ---------- buttons: the second ink shows when you touch something ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 14px 22px;
+    background: var(--ink); color: var(--paper);
+    font: 600 17px/1 var(--text);
+    border: 0; border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .16s var(--ease), box-shadow .16s var(--ease);
+  }
+  .btn-line { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+  .btn-small { padding: 11px 16px; font-size: 16px; }
+  @media (hover: hover) {
+    .btn:hover { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 var(--marigold); }
+    .btn-line:hover { box-shadow: inset 0 0 0 2px var(--ink), 3px 3px 0 var(--marigold); }
+  }
+  .btn:active { transform: none; box-shadow: none; }
+  .btn-line:active { box-shadow: inset 0 0 0 2px var(--ink); }
 
   /* ---------- nav ---------- */
-  nav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(20, 16, 13, .72);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line);
-  }
-  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
-  .logo { font-family: var(--display); font-size: 24px; letter-spacing: .01em; }
-  .logo span { display: inline-block; color: var(--accent); transition: transform var(--med) var(--ease-pop), color var(--fast) var(--ease); }
-  .logo:hover span { transform: translateY(-5px) scale(1.35); color: var(--rose); }
-  .nav-links { display: flex; align-items: center; gap: 28px; font-size: 15px; color: var(--ink-2); }
-  .nav-links a:not(.btn) { position: relative; padding: 4px 0; transition: color var(--fast) var(--ease); }
-  .nav-links a:not(.btn)::after {
-    content: "";
-    position: absolute; left: 0; right: 0; bottom: -2px;
-    height: 2px; border-radius: 2px;
-    background: var(--accent);
-    transform: scaleX(0); transform-origin: right;
-    transition: transform var(--med) var(--ease);
-  }
-  .nav-links a:not(.btn):hover, .nav-links a.active { color: var(--ink); }
-  .nav-links a:not(.btn):hover::after, .nav-links a.active::after { transform: scaleX(1); transform-origin: left; }
-
-  /* ---------- buttons ---------- */
-  .btn {
-    position: relative; overflow: hidden; isolation: isolate;
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 22px;
-    border-radius: 999px;
-    font-weight: 700; font-size: 15px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    font-family: var(--sans);
-    transition: transform var(--fast) var(--ease), background-color var(--fast) var(--ease), border-color var(--fast) var(--ease), box-shadow var(--med) var(--ease);
-  }
-  .btn svg { width: 16px; height: 16px; transition: transform var(--med) var(--ease-pop); }
-  .btn.primary { background: var(--accent); color: var(--accent-ink); }
-  /* light sweep on hover */
-  .btn.primary::before {
-    content: "";
-    position: absolute; top: 0; bottom: 0; left: -50%; width: 35%; z-index: -1;
-    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent);
-    transform: skewX(-20deg);
-    pointer-events: none;
-  }
-  .btn.ghost { border-color: var(--line-2); color: var(--ink); background: transparent; }
-  .btn.small { padding: 9px 16px; font-size: 14px; }
-  @media (hover: hover) {
-    .btn:hover { transform: translateY(-2px); }
-    .btn.primary:hover { background: #f7b955; box-shadow: 0 12px 30px -10px rgba(242, 169, 59, .65); }
-    .btn.primary:hover::before { left: 120%; transition: left .7s var(--ease); }
-    .btn.ghost:hover { border-color: var(--ink-2); background: rgba(243, 233, 216, .06); }
-    .btn:hover .i-right { transform: translateX(4px); }
-    .btn:hover .i-out { transform: translate(2px, -2px); }
-  }
-  .btn:active { transform: scale(.96); transition-duration: .08s; }
+  .top { position: sticky; top: 0; z-index: 10; background: var(--paper); }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+  .mark { font: 700 24px/1 var(--display); text-decoration: none; }
+  .links { display: flex; align-items: center; gap: 28px; font-size: 16px; font-weight: 500; }
+  .links a:not(.btn) { text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+  .links a:not(.btn):hover, .links a.active { border-bottom-color: var(--ink); }
 
   /* ---------- hero ---------- */
-  .hero { padding: 72px 0 96px; }
-  .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
-  .hero-copy > * { animation: rise .8s var(--ease) both; }
-  .hero-copy > :nth-child(1) { animation-delay: .05s; }
-  .hero-copy > :nth-child(2) { animation: wipe 1s var(--ease) .12s both; }
-  .hero-copy > :nth-child(3) { animation-delay: .3s; }
-  .hero-copy > :nth-child(4) { animation-delay: .38s; }
-  .hero-copy > :nth-child(5) { animation-delay: .46s; }
-  .hero-copy > :nth-child(6) { animation-delay: .54s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-  @keyframes wipe {
-    from { opacity: 0; transform: translateY(30px); clip-path: inset(0 0 100% 0); }
-    to { opacity: 1; transform: none; clip-path: inset(-30% -5% -30% -5%); }
+  .hero { padding: 32px 0 0; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 64px; align-items: center; }
+  .title {
+    font: 800 clamp(72px, calc((100vw - 440px) / 4.75), 164px)/1.2 var(--display);
+    white-space: nowrap;
+    margin-left: .05em; /* the headline bar overhangs: line its stem up with the text below */
+    text-shadow:
+      .01em .01em 0 var(--marigold), .02em .02em 0 var(--marigold), .03em .03em 0 var(--marigold), .04em .04em 0 var(--marigold),
+      .05em .05em 0 var(--marigold), .06em .06em 0 var(--marigold), .07em .07em 0 var(--marigold), .08em .08em 0 var(--marigold);
+    animation: lift 1s var(--ease) .15s both;
   }
-  .pill {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 7px 14px;
-    border: 1px solid var(--line-2);
-    border-radius: 999px;
-    font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
-    color: var(--ink-2);
+  @keyframes lift {
+    from {
+      transform: translate(.08em, .08em);
+      text-shadow:
+        0 0 0 var(--marigold), 0 0 0 var(--marigold), 0 0 0 var(--marigold), 0 0 0 var(--marigold),
+        0 0 0 var(--marigold), 0 0 0 var(--marigold), 0 0 0 var(--marigold), 0 0 0 var(--marigold);
+    }
   }
-  .pill i { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-  .pill i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); animation: ping 1.8s var(--ease) infinite; }
-  @keyframes ping { from { transform: scale(1); opacity: .7; } to { transform: scale(3.2); opacity: 0; } }
-  .hindi {
-    font-family: var(--display);
-    font-weight: 400;
-    font-size: clamp(68px, 10.5vw, 136px);
-    line-height: 1.12;
-    margin: 28px 0 6px;
-    letter-spacing: -.01em;
-  }
-  .handle {
-    display: inline-block;
-    font-family: var(--mono); font-size: 18px; color: var(--accent);
-    padding-bottom: 2px;
-    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
-    transition: background-size var(--med) var(--ease);
-  }
-  .handle:hover { background-size: 100% 1px; }
-  .tagline { font-family: var(--display); font-size: clamp(26px, 3vw, 34px); line-height: 1.2; margin: 26px 0 14px; max-width: 18em; }
-  .lede { color: var(--ink-2); max-width: 33em; }
-  .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .tagline { font: 600 clamp(26px, 2.8vw, 36px)/1.15 var(--display); max-width: 17em; margin-top: 12px; text-wrap: balance; }
+  .lede { max-width: 34em; margin-top: 16px; color: var(--ink-2); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .status { margin-top: 14px; font-size: 16px; color: var(--ink-2); }
 
-  /* now playing visual */
-  .player { width: 100%; max-width: 420px; margin-left: auto; animation: rise 1s var(--ease) .2s both; }
-  .stack { position: relative; aspect-ratio: 420 / 470; max-width: 100%; }
-  .stack img {
-    position: absolute; left: 22%; top: 0;
-    width: 56%; aspect-ratio: 9 / 16; object-fit: cover;
-    border-radius: 16px;
-    border: 1px solid var(--line-2);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, .55);
-    transition: transform .8s var(--ease), filter .8s var(--ease);
-    will-change: transform;
-    user-select: none; -webkit-user-drag: none;
+  /* the reel, captioned the way the reels caption themselves */
+  .screen {
+    position: relative; display: block;
+    aspect-ratio: 9 / 16;
+    background: var(--paper-2);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform .16s var(--ease), box-shadow .16s var(--ease);
   }
-  .stack .pos-c { z-index: 2; transform: none; }
-  .stack .pos-l { z-index: 1; transform: translate(-39%, 10%) rotate(-7deg) scale(.96); filter: brightness(.62); cursor: pointer; }
-  .stack .pos-r { z-index: 1; transform: translate(39%, 10%) rotate(7deg) scale(.96); filter: brightness(.62); cursor: pointer; }
-  .stack .pos-c.dim { filter: brightness(.62); }
-  .stack .behind { z-index: 0; }
-  .np {
-    position: relative; z-index: 3;
-    margin: -34px 12px 0;
-    padding: 14px 16px 16px;
-    background: rgba(33, 26, 21, .88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--line-2);
-    border-radius: 16px;
+  .screen-frame { border-radius: 4px; transition: transform .16s var(--ease), box-shadow .16s var(--ease); }
+  .screen img { width: 100%; height: 100%; object-fit: cover; }
+  .screen::after { content: ""; position: absolute; inset: 0 0 auto; height: 26%; background: linear-gradient(rgba(20, 16, 50, .5), transparent); }
+  .caption {
+    position: absolute; left: 8%; right: 8%; top: 5%;
+    z-index: 1;
+    text-align: center; color: #fff;
+    font: 700 19px/1.2 var(--text);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .7), 0 0 14px rgba(0, 0, 0, .45);
   }
-  .np-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-  .np-label { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
-  .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; }
-  .eq i { width: 2px; height: 100%; border-radius: 1px; background: var(--accent); transform-origin: bottom; animation: eq .8s ease-in-out infinite alternate; }
-  .eq i:nth-child(2) { animation-duration: .55s; animation-delay: -.2s; }
-  .eq i:nth-child(3) { animation-duration: .7s; animation-delay: -.45s; }
-  @keyframes eq { from { transform: scaleY(.2); } to { transform: scaleY(1); } }
-  .np-title { font-weight: 700; font-size: 17px; margin-top: 2px; }
-  .np-meta { font-family: var(--mono); font-size: 13px; color: var(--ink-2); white-space: nowrap; }
-  .swap { animation: swapIn .5s var(--ease) both; }
-  @keyframes swapIn { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
-  .np-bar { height: 4px; border-radius: 4px; background: var(--line-2); margin-top: 12px; overflow: hidden; }
-  .np-bar span { display: block; height: 100%; background: var(--accent); border-radius: 4px; transform: scaleX(0); transform-origin: left; }
-  .np-bar span.run { animation: progress 5s linear forwards; }
+  .caption b { display: block; font-weight: 700; }
+  .swap { animation: swap .35s var(--ease) both; }
+  @keyframes swap { from { opacity: .35; } }
+  .controls { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .ctl {
+    flex: none;
+    display: grid; place-items: center;
+    width: 40px; height: 40px;
+    border: 0; border-radius: 50%;
+    background: var(--marigold); color: var(--ink);
+    cursor: pointer;
+  }
+  .ctl svg { width: 14px; height: 14px; fill: currentColor; }
+  .ctl-next { background: transparent; box-shadow: inset 0 0 0 2px var(--ink); }
+  .np-track { flex: 1; min-width: 0; }
+  .np-meta { font-size: 15px; font-weight: 500; line-height: 1.2; }
+  .np-bar { height: 3px; margin-top: 6px; background: var(--rule); }
+  .np-bar span { display: block; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+  .np-bar span.run { animation: progress 6s linear forwards; }
+  .np-bar span.still { animation-play-state: paused; }
   @keyframes progress { to { transform: scaleX(1); } }
   @media (hover: hover) {
-    .player:hover .stack img { transition-duration: .45s; }
-    .player:hover .pos-c { transform: translateY(-8px) scale(1.02); }
-    .player:hover .pos-l { transform: translate(-47%, 8%) rotate(-10deg) scale(.96); filter: brightness(.8); }
-    .player:hover .pos-r { transform: translate(47%, 8%) rotate(10deg) scale(.96); filter: brightness(.8); }
-    .player:hover .np-bar span, .player:hover .eq i { animation-play-state: paused; }
+    .player:hover .np-bar span { animation-play-state: paused; }
+    .screen:hover { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 var(--marigold); }
   }
+
+  /* the poster's billing block */
+  .billing {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-top: 72px;
+    text-align: center;
+    font-stretch: 75%;
+    line-height: 1.1;
+  }
+  .billing p { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 2px 14px; }
+  .billing a { text-decoration: none; }
+  .billing a:hover { text-decoration: underline; }
+  .cr-s { font-size: 16px; font-weight: 500; font-stretch: 87%; color: var(--ink-2); }
+  .cr-m { font-size: 21px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; }
+  .cr-l { font-size: clamp(30px, 4vw, 48px); font-weight: 700; text-transform: uppercase; line-height: 1.05; }
 
   /* ---------- sections ---------- */
-  section.block { padding: 88px 0; border-top: 1px solid var(--line); }
-  .eyebrow { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-  h2 { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 5vw, 58px); line-height: 1.08; margin: 12px 0 0; max-width: 16em; }
-  .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 44px; }
-  .section-head p { color: var(--ink-2); max-width: 30em; }
+  .sec { padding-top: 128px; }
+  .sec-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px 48px; margin-bottom: 48px; }
+  .sec-head p { max-width: 26em; color: var(--ink-2); }
 
-  /* cards: lift + a glow that follows the cursor */
-  :is(.tile, .trait, .fit) {
-    position: relative; isolation: isolate;
-    transition: transform var(--med) var(--ease), border-color var(--med) var(--ease), box-shadow var(--med) var(--ease);
+  /* followers vs views, drawn to scale */
+  .scale { display: grid; gap: 14px; }
+  .scale-row { display: grid; grid-template-columns: 200px minmax(0, 1fr); align-items: center; gap: 16px; }
+  .scale-k { font-weight: 500; line-height: 1.2; }
+  .scale-bar { display: flex; align-items: center; gap: 12px; }
+  .scale-bar i {
+    display: block; flex: none;
+    width: calc((100% - 130px) * var(--r));
+    height: 56px;
+    background: var(--ink);
   }
-  :is(.tile, .trait, .fit)::before {
-    content: "";
-    position: absolute; inset: 0; z-index: -1;
-    border-radius: inherit;
-    pointer-events: none;
-    background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(242, 169, 59, .15), transparent 65%);
-    opacity: 0;
-    transition: opacity var(--med) var(--ease);
+  .scale-v { font: 700 36px/1 var(--display); }
+  .reach { font: 600 clamp(24px, 2.8vw, 36px)/1.25 var(--display); max-width: 24em; margin-top: 40px; }
+  .reach-more { max-width: 34em; margin-top: 12px; color: var(--ink-2); }
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 64px; }
+  .facts dt { font-size: 16px; font-weight: 500; }
+  .facts .v { font: 700 44px/1.2 var(--display); }
+  .facts .d { font-size: 16px; line-height: 1.35; color: var(--ink-2); }
+  .footnote { max-width: 60em; margin-top: 40px; font-size: 15px; color: var(--ink-2); }
+
+  /* top reels, ranked */
+  .chart { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 40px 24px; }
+  .reel { position: relative; display: block; padding-top: 34px; text-decoration: none; }
+  .rank {
+    position: absolute; top: 0; left: -2px; z-index: 1;
+    font: 800 72px/1 var(--display);
+    text-shadow: var(--extrude);
   }
+  .shot { display: block; border-radius: 3px; transition: transform .16s var(--ease), box-shadow .16s var(--ease); }
+  .shot img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 3px; }
+  .song { display: block; margin-top: 12px; font: 600 21px/1.15 var(--display); }
+  .views { display: block; margin-top: 4px; font-size: 16px; line-height: 1.3; color: var(--ink-2); }
   @media (hover: hover) {
-    :is(.tile, .trait, .fit):hover { transform: translateY(-4px); border-color: rgba(242, 169, 59, .38); box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .9); }
-    :is(.tile, .trait, .fit):hover::before { opacity: 1; }
+    .reel:hover .shot { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 var(--marigold); }
+    .reel:hover .song { text-decoration: underline; text-underline-offset: .15em; }
   }
-
-  /* stats */
-  .stats { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }
-  .tile { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
-  .tile .k { font-family: var(--mono); font-size: 13px; color: var(--ink-3); letter-spacing: .04em; }
-  .tile .v { font-family: var(--display); font-size: 48px; line-height: 1.1; margin-top: 8px; font-variant-numeric: tabular-nums; }
-  .tile .d { color: var(--ink-2); font-size: 15px; margin-top: 4px; }
-  .tile.hero-num { display: flex; flex-direction: column; justify-content: space-between; min-height: 300px; }
-  .tile.hero-num .v { font-size: clamp(88px, 12vw, 148px); line-height: 1; color: var(--accent); }
-  .tile.hero-num .d { font-size: 18px; max-width: 20em; }
-  .tiles-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .reach {
-    grid-column: 1 / -1;
-    display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center;
-    background: linear-gradient(100deg, rgba(242, 169, 59, .12), rgba(233, 87, 106, .06) 60%, transparent), var(--card);
-    border-color: rgba(242, 169, 59, .35);
-  }
-  .reach .v { font-size: clamp(56px, 7vw, 84px); margin: 0; color: var(--accent); }
-  .reach p { color: var(--ink-2); max-width: 46em; }
-  .reach p b { color: var(--ink); font-weight: 700; }
-  .footnote { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 18px; }
-
-  /* top reels */
-  .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .reel {
-    position: relative; display: block;
-    border-radius: var(--radius); overflow: hidden;
-    border: 1px solid var(--line);
-    aspect-ratio: 9 / 16; max-width: 100%;
-    background: var(--card);
-    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
-    transition: transform .6s var(--ease), border-color var(--med) var(--ease), box-shadow var(--med) var(--ease);
-  }
-  .reel img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease), filter var(--med) var(--ease); }
-  .reel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(10, 8, 6, .92)); }
-  /* glare that follows the cursor */
-  .reel::before {
-    content: "";
-    position: absolute; inset: 0; z-index: 1;
-    pointer-events: none;
-    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 30%), rgba(255, 240, 220, .18), transparent 60%);
-    opacity: 0;
-    transition: opacity var(--med) var(--ease);
-  }
-  .reel .rank {
-    position: absolute; top: 14px; left: 14px; z-index: 2;
-    font-family: var(--mono); font-size: 13px;
-    padding: 5px 10px; border-radius: 999px;
-    background: rgba(20, 16, 13, .7); border: 1px solid var(--line-2);
-    transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease), border-color var(--fast) var(--ease);
-  }
-  .reel .info { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; transition: transform var(--med) var(--ease); }
-  .reel .song { font-family: var(--display); font-size: 26px; line-height: 1.15; }
-  .reel .nums { display: flex; gap: 16px; margin-top: 8px; font-family: var(--mono); font-size: 14px; color: var(--ink-2); }
-  .reel .nums b { color: var(--ink); font-weight: 500; }
-  .reel .open {
-    position: absolute; top: 14px; right: 14px; z-index: 2;
-    width: 34px; height: 34px; border-radius: 50%;
-    display: grid; place-items: center;
-    background: rgba(20, 16, 13, .7); border: 1px solid var(--line-2);
-    opacity: 0; transition: opacity var(--fast) var(--ease);
-  }
-  .reel .open svg { width: 14px; height: 14px; }
-  .reel .play {
-    position: absolute; left: 50%; top: 42%; z-index: 2;
-    width: 60px; height: 60px; margin: -30px 0 0 -30px;
-    border-radius: 50%;
-    display: grid; place-items: center;
-    background: var(--accent); color: var(--accent-ink);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
-    opacity: 0; transform: scale(.5);
-    transition: transform var(--med) var(--ease-pop), opacity var(--fast) var(--ease);
-  }
-  .reel .play svg { width: 20px; height: 20px; margin-left: 3px; }
-  .reel:focus-visible .play, .reel:focus-visible .open { opacity: 1; transform: none; }
-  @media (hover: hover) {
-    .reel:hover {
-      --lift: -6px;
-      border-color: rgba(242, 169, 59, .45);
-      box-shadow: 0 30px 60px -28px rgba(0, 0, 0, .9);
-      transition: transform .2s var(--ease), border-color var(--med) var(--ease), box-shadow var(--med) var(--ease);
-    }
-    .reel:hover img { transform: scale(1.07); filter: saturate(1.15) brightness(1.05); }
-    .reel:hover::before { opacity: 1; }
-    .reel:hover .play { opacity: 1; transform: scale(1); }
-    .reel:hover .open { opacity: 1; }
-    .reel:hover .info { transform: translateY(-4px); }
-    .reel:hover .rank { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
-  }
-  .reel:active { transform: scale(.98); transition-duration: .1s; }
 
   /* tracklist */
-  .toggle { position: relative; display: inline-flex; padding: 4px; border: 1px solid var(--line-2); border-radius: 999px; gap: 4px; }
-  .toggle::before {
-    content: "";
-    position: absolute; top: 4px; bottom: 4px; left: 0;
-    width: var(--w, 0px);
-    border-radius: 999px;
-    background: var(--ink);
-    transform: translateX(var(--x, 0px));
-    transition: transform var(--med) var(--ease), width var(--med) var(--ease);
-  }
+  .toggle { display: inline-flex; box-shadow: inset 0 0 0 2px var(--ink); border-radius: 4px; }
   .toggle button {
-    position: relative; z-index: 1;
-    font: 500 14px var(--sans); color: var(--ink-2);
-    background: none; border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer;
-    transition: color var(--med) var(--ease);
+    padding: 11px 16px;
+    font: 600 16px/1 var(--text); color: var(--ink);
+    background: none; border: 0; border-radius: 4px;
+    cursor: pointer;
   }
-  .toggle button[aria-pressed="true"] { color: var(--bg); }
-  .toggle:not(.ready) button[aria-pressed="true"] { background: var(--ink); }
-  .toggle button[aria-pressed="false"]:hover { color: var(--ink); }
-  .tracks { border-top: 1px solid var(--line); }
+  .toggle button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
   .track {
     display: grid;
-    grid-template-columns: 36px 48px 1fr 110px 200px;
-    gap: 16px; align-items: center;
-    padding: 12px 8px;
-    border-bottom: 1px solid var(--line);
-    border-radius: 10px;
-    transition: background-color var(--fast) var(--ease);
+    grid-template-columns: 32px 44px minmax(0, 1fr) 72px 200px;
+    align-items: center; gap: 16px;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
   }
-  a.track:hover { background: var(--bg-2); }
-  .track.head { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-radius: 0; }
-  .track .n { position: relative; font-family: var(--mono); color: var(--ink-3); font-size: 14px; text-align: right; }
-  .track .n .num { display: inline-block; transition: opacity var(--fast) var(--ease), transform var(--med) var(--ease); }
-  .track .n .pl {
-    position: absolute; right: 0; top: 50%;
-    display: grid; color: var(--accent);
-    opacity: 0; transform: translateY(-50%) scale(.5);
-    transition: opacity var(--fast) var(--ease), transform var(--med) var(--ease-pop);
+  .track-head { padding-block: 6px; font-size: 15px; font-weight: 500; color: var(--ink-2); border-bottom: 2px solid var(--ink); }
+  a.track:hover { background: var(--paper-2); }
+  a.track:hover .t { text-decoration: underline; text-underline-offset: .15em; }
+  .track img { width: 44px; height: 44px; object-fit: cover; object-position: 50% 30%; border-radius: 3px; }
+  .n { text-align: right; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .t { display: block; font: 600 21px/1.15 var(--display); }
+  .date { display: block; font-size: 15px; line-height: 1.3; color: var(--ink-2); }
+  .likes, .plays { text-align: right; font-variant-numeric: tabular-nums; }
+  .likes { color: var(--ink-2); }
+  .plays { font-weight: 500; }
+  .meter { display: block; height: 4px; margin-top: 4px; background: var(--rule); }
+  .meter i { display: block; height: 100%; margin-left: auto; background: var(--ink); }
+
+  /* one reel frame, labelled */
+  .anatomy { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 72px; align-items: center; }
+  .unit { display: inline-block; }
+  .frame { position: relative; }
+  .frame img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 4px; }
+  .tag {
+    position: absolute; left: var(--x); top: var(--y);
+    display: flex; align-items: center; gap: 6px;
+    transform: translate(-7px, -50%);
+    font-size: 15px; font-weight: 600; line-height: 1;
+    white-space: nowrap;
   }
-  .track .n .pl svg { width: 14px; height: 14px; }
-  .track img { width: 48px; height: 48px; object-fit: cover; object-position: center 30%; border-radius: 8px; transition: transform var(--med) var(--ease-pop); }
-  .track .t { font-weight: 700; transition: color var(--fast) var(--ease); }
-  .track .date { font-size: 13px; color: var(--ink-3); font-family: var(--mono); }
-  .track .likes { font-family: var(--mono); font-size: 14px; color: var(--ink-2); text-align: right; }
-  .track .plays { font-family: var(--mono); font-size: 14px; text-align: right; font-variant-numeric: tabular-nums; }
-  .meter { height: 3px; background: var(--line); border-radius: 3px; margin-top: 6px; overflow: hidden; }
-  .meter span { display: block; height: 100%; background: var(--accent); border-radius: 3px; margin-left: auto; transform-origin: right; transition: box-shadow var(--med) var(--ease); }
+  .tag span { padding: 6px 8px; background: var(--paper); border-radius: 3px; }
+  .tag-left { flex-direction: row-reverse; transform: translate(calc(-100% + 7px), -50%); }
+  .tag::before, .traits dt::before {
+    content: ""; flex: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--marigold);
+    box-shadow: 0 0 0 2px var(--ink);
+  }
+  .anatomy-copy p { max-width: 32em; margin-top: 20px; color: var(--ink-2); }
+  .traits { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 40px; margin-top: 44px; }
+  .traits dt { display: flex; align-items: center; gap: 12px; font: 600 24px/1.2 var(--display); }
+  .traits dd { margin-top: 6px; color: var(--ink-2); }
+
+  /* who it suits, and what you get */
+  .fits { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
+  .fits div { padding: 22px 0 32px; border-top: 2px solid var(--ink); }
+  .fits dt { font: 600 clamp(24px, 2.4vw, 30px)/1.15 var(--display); }
+  .fits dd { max-width: 30em; margin-top: 8px; color: var(--ink-2); }
+  .terms { display: grid; grid-template-columns: 2fr 1fr; gap: 56px; margin-top: 40px; padding: 32px; background: var(--paper-2); border-radius: 4px; }
+  .deliver { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 32px; margin-top: 16px; }
+  .deliver b { display: block; font-weight: 600; }
+  .deliver span, .rates p { color: var(--ink-2); }
+  .rates p { margin-top: 16px; }
+  .rates b { display: block; color: var(--ink); font-weight: 600; }
+
+  /* ---------- contact: the same two inks, reversed ---------- */
+  .contact { margin-top: 128px; padding: 112px 0 32px; background: var(--ink); color: var(--paper); }
+  .contact h2 { font-size: clamp(44px, 7vw, 92px); line-height: 1.04; max-width: 14em; }
+  .contact p { max-width: 32em; margin-top: 20px; }
+  .contact .actions { margin-top: 32px; }
+  .contact .btn { background: var(--marigold); color: var(--ink); }
+  .contact .btn-line { background: transparent; color: var(--paper); box-shadow: inset 0 0 0 2px var(--paper); }
   @media (hover: hover) {
-    a.track:hover .n .num { opacity: 0; transform: scale(.5); }
-    a.track:hover .n .pl { opacity: 1; transform: translateY(-50%) scale(1); }
-    a.track:hover img { transform: scale(1.08) rotate(-3deg); }
-    a.track:hover .t { color: var(--accent); }
-    a.track:hover .meter span { box-shadow: 0 0 10px rgba(242, 169, 59, .7); }
+    .contact .btn:hover { box-shadow: 3px 3px 0 var(--paper); }
+    .contact .btn-line:hover { box-shadow: inset 0 0 0 2px var(--paper), 3px 3px 0 var(--marigold); }
   }
-  .tracks.pre a.track { opacity: 0; }
-  .tracks.sorting a.track { animation: rowIn .5s var(--ease) both; animation-delay: calc(var(--i) * 25ms); }
-  .tracks.sorting .meter span { animation: grow .8s var(--ease) both; animation-delay: calc(var(--i) * 25ms + .15s); }
-  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-  /* format */
-  .format { display: grid; grid-template-columns: .9fr 1.1fr; gap: 56px; align-items: start; }
-  .format .copy p { color: var(--ink-2); margin-top: 18px; max-width: 30em; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .chip {
-    padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line-2); font-size: 14px;
-    transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease), background-color var(--fast) var(--ease);
-  }
-  .chips-label { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-top: 32px; }
-  .traits { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .trait { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
-  .trait .num { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 13px; color: var(--accent); }
-  .trait .num::after { content: ""; width: 0; height: 1px; background: var(--accent); transition: width var(--med) var(--ease); }
-  .trait h3 { font-family: var(--display); font-weight: 400; font-size: 25px; margin: 10px 0 6px; line-height: 1.15; }
-  .trait p { color: var(--ink-2); font-size: 15px; }
-  @media (hover: hover) {
-    .chip:hover { border-color: rgba(242, 169, 59, .6); color: var(--accent); background: rgba(242, 169, 59, .06); }
-    .trait:hover .num::after { width: 36px; }
-  }
-
-  /* collab */
-  .fits { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .fit { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; gap: 10px; }
-  .fit .icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    display: grid; place-items: center;
-    background: rgba(242, 169, 59, .12); color: var(--accent);
-    transition: transform var(--med) var(--ease-pop), background-color var(--med) var(--ease), color var(--med) var(--ease);
-  }
-  .fit .icon svg { width: 22px; height: 22px; }
-  .fit h3 { font-size: 18px; font-weight: 700; margin-top: 6px; }
-  .fit p { color: var(--ink-2); font-size: 15px; }
-  .deliver { margin-top: 16px; display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
-  .deliver ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
-  .deliver li { padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; gap: 14px; }
-  .deliver li:nth-last-child(-n+2) { border-bottom: 0; }
-  .deliver li b { display: block; font-weight: 700; transition: color var(--fast) var(--ease); }
-  .deliver li span { color: var(--ink-2); font-size: 15px; }
-  .deliver li::before { content: "→"; color: var(--accent); font-family: var(--mono); transition: transform var(--med) var(--ease-pop); }
-  .rates h3 { font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1.15; margin-top: 8px; }
-  .rates p { color: var(--ink-2); font-size: 15px; margin-top: 10px; }
-  @media (hover: hover) {
-    .fit:hover .icon { transform: rotate(-8deg) scale(1.1); background: var(--accent); color: var(--accent-ink); }
-    .deliver li:hover::before { transform: translateX(5px); }
-    .deliver li:hover b { color: var(--accent); }
-  }
-
-  /* contact */
-  .contact { text-align: center; padding: 112px 0 96px; border-top: 1px solid var(--line); }
-  .contact h2 { margin: 14px auto 0; max-width: 14em; font-size: clamp(42px, 6.5vw, 78px); }
-  .contact p { color: var(--ink-2); margin: 18px auto 0; max-width: 32em; }
-  .contact .btn-row { justify-content: center; }
-  footer { border-top: 1px solid var(--line); padding: 28px 0; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-  /* scroll reveal: only applied by script to content below the fold */
-  .reveal { opacity: 0; transform: translateY(24px); }
-  .reveal.in {
-    opacity: 1; transform: none;
-    transition: opacity .7s var(--ease) var(--d, 0s), transform .7s var(--ease) var(--d, 0s);
-  }
+  .contact :focus-visible { outline-color: var(--paper); }
+  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; margin-top: 96px; font-size: 15px; }
 
   /* ---------- responsive ---------- */
-  @media (max-width: 980px) {
-    .hero .wrap { grid-template-columns: 1fr; gap: 48px; }
-    .player { margin: 0 auto; max-width: 380px; }
-    .stats { grid-template-columns: 1fr; }
-    .format { grid-template-columns: 1fr; gap: 36px; }
-    .fits { grid-template-columns: 1fr 1fr; }
-    .deliver { grid-template-columns: 1fr; }
+  @media (max-width: 1080px) {
+    .chart { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .anatomy { grid-template-columns: 300px minmax(0, 1fr); gap: 48px; }
+    .traits { grid-template-columns: 1fr; gap: 24px; }
+    .tag { font-size: 14px; }
   }
-  @media (max-width: 720px) {
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .title { font-size: min(18.5vw, 156px); }
+    .player { width: min(100%, 290px); }
+    .billing { margin-top: 56px; }
+    .sec { padding-top: 88px; }
+    .facts { grid-template-columns: 1fr 1fr; }
+    .anatomy { grid-template-columns: minmax(0, 1fr); }
+    .frame { width: min(100%, 360px); }
+    .traits { grid-template-columns: 1fr 1fr; }
+    .fits { grid-template-columns: minmax(0, 1fr); }
+    .terms { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .contact { margin-top: 88px; padding-top: 80px; }
+  }
+  @media (max-width: 640px) {
     :root { --gutter: 16px; }
-    body { font-size: 16px; }
-    .nav-links a:not(.btn) { display: none; }
-    .hero { padding: 44px 0 64px; }
-    .player { max-width: 310px; }
-    section.block { padding: 64px 0; }
-    .section-head { margin-bottom: 32px; }
-    .tile { padding: 20px; }
-    .tile .v { font-size: 38px; }
-    .tile.hero-num { min-height: 0; gap: 24px; }
-    .reach { grid-template-columns: 1fr; gap: 8px; }
-    .reels { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .reel .song { font-size: 19px; }
-    .reel .nums { gap: 10px; font-size: 12px; }
-    .reel .info { left: 12px; right: 12px; bottom: 12px; }
-    .reel .open { opacity: 1; }
-    .track { grid-template-columns: 22px 44px 1fr 92px; gap: 12px; padding: 10px 4px; }
-    .track img { width: 44px; height: 44px; }
+    body { font-size: 17px; }
+    .hero .btn { padding-inline: 16px; }
+    .links a:not(.btn) { display: none; }
+    .chart { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
+    .scale-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .scale-bar i { height: 40px; }
+    .scale-v { font-size: 30px; }
+    .facts .v { font-size: 36px; }
+    .track { grid-template-columns: 22px 44px minmax(0, 1fr) 92px; gap: 10px; padding-inline: 2px; }
     .track .likes { display: none; }
-    .traits, .fits, .deliver ul { grid-template-columns: 1fr; }
-    .deliver li:nth-last-child(2) { border-bottom: 1px solid var(--line); }
+    .traits, .deliver { grid-template-columns: minmax(0, 1fr); }
+    .terms { padding: 24px 20px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: .01ms !important;
-      animation-iteration-count: 1 !important;
-      animation-delay: 0s !important;
-      transition-duration: .01ms !important;
-      transition-delay: 0s !important;
-    }
-    .np-bar span { transform: scaleX(1); }
+    .title, .swap { animation: none; }
+    .btn, .screen, .shot { transition: none; }
   }
 
   /* ---------- print / save as PDF ---------- */
   @media print {
-    :root { --bg: #fff; --bg-2: #fff; --card: #f7f2ea; --ink: #16110d; --ink-2: #4a4036; --ink-3: #7a6d5f; --line: #e6ddd0; --line-2: #d6cbbb; --accent: #b86e0a; }
-    body { background: #fff; font-size: 12pt; }
-    body::before, nav, .toggle, .no-print, .reel .open, .reel .play { display: none !important; }
-    .reveal, .tracks.pre a.track { opacity: 1 !important; transform: none !important; }
-    .hero-copy > *, .player { animation: none !important; }
-    .hero { padding: 0 0 24px; }
-    .hero .wrap { grid-template-columns: 1.2fr .8fr; }
-    section.block, .contact { padding: 28px 0; break-inside: avoid; }
-    .np { background: #fff; backdrop-filter: none; }
-    .reel::after { background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, .8)); }
-    .reel .song, .reel .nums, .reel .nums b, .reel .rank { color: #fff; }
-    .reel .rank { background: rgba(0, 0, 0, .5); }
-    .tile, .trait, .fit, .reel, .track { break-inside: avoid; }
+    :root { --paper: #fff; --paper-2: #f6ebe8; }
+    .top, .controls, .toggle, .no-print { display: none !important; }
+    .title { animation: none; }
+    .sec { padding-top: 32px; }
+    .billing { margin-top: 24px; }
+    .contact { margin-top: 32px; padding: 24px 0; background: #fff; color: var(--ink); }
+    .contact .btn { background: none; color: var(--ink); padding: 0; }
+    .sec-head, .fits div, .track, .reel, .terms { break-inside: avoid; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
 <body>
 
-<nav>
+<nav class="top">
   <div class="wrap">
-    <a href="#top" class="logo">galelagja<span>.</span></a>
-    <div class="nav-links">
+    <a href="#top" class="mark">galelagja</a>
+    <div class="links">
       <a href="#numbers">Numbers</a>
       <a href="#reels">Reels</a>
       <a href="#format">Format</a>
       <a href="#collab">Collab</a>
-      <a href="#contact" class="btn primary small">Work with me</a>
+      <a href="#contact" class="btn btn-small">Work with me</a>
     </div>
   </div>
 </nav>
 
 <header class="hero" id="top">
   <div class="wrap">
-    <div class="hero-copy">
-      <span class="pill"><i></i>Open for paid collaborations</span>
-      <h1 class="hindi" lang="hi">गले लग जा</h1>
-      <a class="handle" data-ig-profile href="#" target="_blank" rel="noopener">@galelagja1</a>
-      <p class="tagline">Chopped guy listening to Bollywood songs.</p>
-      <p class="lede">Reels built around one song at a time: wired earphones, the track playing on screen, a straight face and a warm, film-like look. Mostly 2000s–2010s Bollywood romance and Sufi.</p>
-      <div class="btn-row">
-        <a href="#contact" class="btn primary">Work with me
-          <svg class="i-right" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    <div class="hero-grid">
+      <div>
+        <h1 class="title" lang="hi">गले लग जा</h1>
+        <p class="tagline">Chopped guy listening to Bollywood songs.</p>
+        <p class="lede">Reels built around one song at a time: wired earphones, the track playing on screen, a straight face and a warm, film-like look. Mostly 2000s–2010s Bollywood romance and Sufi.</p>
+        <div class="actions">
+          <a href="#contact" class="btn">Work with me</a>
+          <a data-ig-profile href="#" target="_blank" rel="noopener" class="btn btn-line no-print">Watch on Instagram</a>
+        </div>
+        <p class="status">Open for paid collaborations.</p>
+      </div>
+
+      <div class="player">
+        <a class="screen" id="np-link" href="#" target="_blank" rel="noopener">
+          <img id="np-img" alt="">
+          <span class="caption" aria-hidden="true">Listening to<b id="np-song"></b></span>
         </a>
-        <a data-ig-profile href="#" target="_blank" rel="noopener" class="btn ghost no-print">Watch on Instagram
-          <svg class="i-out" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11l6-6M6 5h5v5"/></svg>
-        </a>
+        <div class="controls">
+          <button type="button" class="ctl" id="np-toggle" aria-label="Pause">
+            <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1h3v12H3zM8 1h3v12H8z"/></svg>
+          </button>
+          <div class="np-track">
+            <div class="np-meta" id="np-meta" aria-live="polite"></div>
+            <div class="np-bar"><span id="np-bar"></span></div>
+          </div>
+          <button type="button" class="ctl ctl-next" id="np-next" aria-label="Next reel">
+            <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 1l8 6-8 6zM10 1h2v12h-2z"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="player" aria-label="Most viewed reels">
-      <div class="stack">
-        <img alt="" src="">
-        <img alt="" src="">
-        <img alt="" src="">
-      </div>
-      <div class="np">
-        <div class="np-top">
-          <div>
-            <div class="np-label"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Now playing</div>
-            <div class="np-title" id="np-title"></div>
-          </div>
-          <div class="np-meta" id="np-meta"></div>
-        </div>
-        <div class="np-bar"><span id="np-bar"></span></div>
-      </div>
+    <div class="billing">
+      <p><a class="cr-s" data-ig-profile href="#" target="_blank" rel="noopener">@galelagja1 presents</a></p>
+      <p><span class="cr-l">A chopped guy</span> <span class="cr-s">in</span> <span class="cr-l">Gale lag ja</span> <span class="cr-s">with</span> <span class="cr-l">Wired earphones</span></p>
+      <p><span class="cr-s">songs by</span> <span class="cr-m">Mohit Chauhan</span> <span class="cr-m">Shreya Ghoshal</span> <span class="cr-m">Rahat Fateh Ali Khan</span> <span class="cr-m">Pritam</span></p>
+      <p><span class="cr-s">expression</span> <span class="cr-m">None</span> <span class="cr-s">colour</span> <span class="cr-m">Sun-washed</span> <span class="cr-s">now showing on</span> <span class="cr-m">Instagram</span></p>
     </div>
   </div>
 </header>
 
-<section class="block" id="numbers">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">01 · The numbers</div>
+<main>
+  <section class="sec" id="numbers">
+    <div class="wrap">
+      <div class="sec-head">
         <h2>Small page. Big reach.</h2>
+        <p id="since-line"></p>
       </div>
-      <p id="since-line"></p>
-    </div>
 
-    <div class="stats">
-      <div class="tile hero-num">
-        <div class="k">TOTAL VIEWS</div>
-        <div>
-          <div class="v" id="s-views"></div>
-          <div class="d" id="s-views-d"></div>
+      <div class="scale" id="scale" role="img">
+        <div class="scale-row">
+          <span class="scale-k">Followers</span>
+          <span class="scale-bar"><i id="bar-followers"></i><span class="scale-v" id="s-followers"></span></span>
+        </div>
+        <div class="scale-row">
+          <span class="scale-k">Average views per reel</span>
+          <span class="scale-bar"><i style="--r:1"></i><span class="scale-v" id="s-avg"></span></span>
         </div>
       </div>
-      <div class="tiles-4">
-        <div class="tile"><div class="k">AVG VIEWS / REEL</div><div class="v" id="s-avg"></div><div class="d">across every reel</div></div>
-        <div class="tile"><div class="k">ENGAGEMENT RATE</div><div class="v" id="s-eng"></div><div class="d">likes + comments ÷ views</div></div>
-        <div class="tile"><div class="k">REELS PAST 100K</div><div class="v" id="s-100k"></div><div class="d" id="s-100k-d"></div></div>
-        <div class="tile"><div class="k">TOTAL LIKES</div><div class="v" id="s-likes"></div><div class="d" id="s-comments"></div></div>
-      </div>
-      <div class="tile reach">
-        <div class="v" id="s-reach"></div>
-        <p id="s-reach-d"></p>
-      </div>
-    </div>
-    <p class="footnote" id="s-note"></p>
-  </div>
-</section>
+      <p class="reach" id="s-reach"></p>
+      <p class="reach-more">Instagram keeps pushing these reels to new people, so a collab reaches well beyond the people who already follow me.</p>
 
-<section class="block" id="reels">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">02 · Top reels</div>
+      <dl class="facts">
+        <div><dt>Total views</dt><dd class="v" id="s-views"></dd><dd class="d" id="s-views-d"></dd></div>
+        <div><dt>Engagement rate</dt><dd class="v" id="s-eng"></dd><dd class="d">likes and comments as a share of views</dd></div>
+        <div><dt>Reels past 100K</dt><dd class="v" id="s-100k"></dd><dd class="d" id="s-100k-d"></dd></div>
+        <div><dt>Total likes</dt><dd class="v" id="s-likes"></dd><dd class="d" id="s-comments"></dd></div>
+      </dl>
+      <p class="footnote" id="s-note"></p>
+    </div>
+  </section>
+
+  <section class="sec" id="reels">
+    <div class="wrap">
+      <div class="sec-head">
         <h2>The ones that travelled.</h2>
+        <p>Tap any reel to watch it on Instagram.</p>
       </div>
-      <p>Tap any reel to watch it on Instagram.</p>
+      <ol class="chart" id="top-reels"></ol>
     </div>
-    <div class="reels" id="top-reels"></div>
-  </div>
-</section>
+  </section>
 
-<section class="block" id="tracklist">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">03 · Every reel</div>
+  <section class="sec" id="tracklist">
+    <div class="wrap">
+      <div class="sec-head">
         <h2>The full tracklist.</h2>
+        <div class="toggle" role="group" aria-label="Sort reels">
+          <button type="button" data-sort="date" aria-pressed="true">Latest</button>
+          <button type="button" data-sort="views" aria-pressed="false">Most viewed</button>
+        </div>
       </div>
-      <div class="toggle" role="group" aria-label="Sort reels">
-        <button type="button" data-sort="date" aria-pressed="true">Latest</button>
-        <button type="button" data-sort="views" aria-pressed="false">Most viewed</button>
-      </div>
+      <div id="tracks"></div>
     </div>
-    <div class="tracks" id="tracks"></div>
-  </div>
-</section>
+  </section>
 
-<section class="block" id="format">
-  <div class="wrap format">
-    <div class="copy">
-      <div class="eyebrow">04 · The format</div>
-      <h2>One song. One look. Every time.</h2>
-      <p>Every reel is one track and one mood. I put the song on, hold the phone up so you can see what's playing, and let the music do the talking. The “Chopped guy listening…” captions add a self-aware joke on top.</p>
-      <div class="chips-label">Artists I feature most</div>
-      <div class="chips">
-        <span class="chip">Mohit Chauhan</span>
-        <span class="chip">Shreya Ghoshal</span>
-        <span class="chip">Rahat Fateh Ali Khan</span>
-        <span class="chip">Pritam</span>
-      </div>
-      <div class="chips-label">Niche</div>
-      <div class="chips">
-        <span class="chip">Bollywood</span>
-        <span class="chip">Hindi music</span>
-        <span class="chip">Romantic &amp; Sufi</span>
+  <section class="sec" id="format">
+    <div class="wrap anatomy">
+      <figure class="frame">
+        <img src="assets/reels/DeQh2dfBjN2.jpg" alt="A frame from a reel: standing among sunlit trees in a checked shirt, wired earphones in, holding up a phone that shows the song playing." loading="lazy">
+        <div class="tag tag-left" style="--x:80%;--y:9%"><span>Warm film look</span></div>
+        <div class="tag tag-left" style="--x:43%;--y:33%"><span>A straight face</span></div>
+        <div class="tag tag-left" style="--x:66%;--y:53%"><span>Wired earphones</span></div>
+        <div class="tag" style="--x:19%;--y:78%"><span>The song on screen</span></div>
+      </figure>
+      <div class="anatomy-copy">
+        <h2><span class="unit">One song. One look.</span> Every time.</h2>
+        <p>Every reel is one track and one mood. I put the song on, hold the phone up so you can see what's playing, and let the music do the talking. The “Chopped guy listening…” captions add a self-aware joke on top.</p>
+        <dl class="traits">
+          <div><dt>Wired earphones</dt><dd>In every single frame. They're part of the character.</dd></div>
+          <div><dt>The song on screen</dt><dd>The phone shows the track that's playing, so viewers know exactly what to search.</dd></div>
+          <div><dt>A straight face</dt><dd>No over-acting. A still, deadpan look and the song carries the feeling.</dd></div>
+          <div><dt>Warm film look</dt><dd>Sun-washed colours and grain that feel like an old Bollywood still.</dd></div>
+        </dl>
       </div>
     </div>
-    <div class="traits">
-      <div class="trait"><div class="num">01</div><h3>Wired earphones</h3><p>In every single frame. They're part of the character.</p></div>
-      <div class="trait"><div class="num">02</div><h3>The song on screen</h3><p>The phone shows the track that's playing, so viewers know exactly what to search.</p></div>
-      <div class="trait"><div class="num">03</div><h3>A straight face</h3><p>No over-acting. A still, deadpan look and the song carries the feeling.</p></div>
-      <div class="trait"><div class="num">04</div><h3>Warm film look</h3><p>Sun-washed colours and grain that feel like an old Bollywood still.</p></div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="block" id="collab">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">05 · Work with me</div>
+  <section class="sec" id="collab">
+    <div class="wrap">
+      <div class="sec-head">
         <h2>Where your brand fits in.</h2>
+        <p>The format already has natural spots for a song, an app or a product. No awkward ad break needed.</p>
       </div>
-      <p>The format already has natural spots for a song, an app or a product. No awkward ad break needed.</p>
-    </div>
 
-    <div class="fits">
-      <div class="fit">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div>
-        <h3>Music labels &amp; artists</h3>
-        <p>Launch a new track or bring back an old one. Your song becomes the reel, on screen and in the caption.</p>
-      </div>
-      <div class="fit">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 10.5l4 2.5-4 2.5z"/></svg></div>
-        <h3>Music &amp; streaming apps</h3>
-        <p>The player is on screen in every reel. Your app can be the one that's playing.</p>
-      </div>
-      <div class="fit">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="7" rx="1.5"/><rect x="16.5" y="14" width="4.5" height="7" rx="1.5"/></svg></div>
-        <h3>Earphones &amp; audio</h3>
-        <p>Earphones are in every frame already, so a product swap feels natural, not forced.</p>
-      </div>
-      <div class="fit">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 3 4-3 5 4-3 4-2-1v11H8V10l-2 1-3-4z"/></svg></div>
-        <h3>Fashion &amp; lifestyle</h3>
-        <p>Each reel is a styled portrait. Shirts, glasses and accessories fit right into the frame.</p>
-      </div>
-    </div>
+      <dl class="fits">
+        <div><dt>Music labels &amp; artists</dt><dd>Launch a new track or bring back an old one. Your song becomes the reel, on screen and in the caption.</dd></div>
+        <div><dt>Music &amp; streaming apps</dt><dd>The player is on screen in every reel. Your app can be the one that's playing.</dd></div>
+        <div><dt>Earphones &amp; audio</dt><dd>Earphones are in every frame already, so a product swap feels natural, not forced.</dd></div>
+        <div><dt>Fashion &amp; lifestyle</dt><dd>Each reel is a styled portrait. Shirts, glasses and accessories fit right into the frame.</dd></div>
+      </dl>
 
-    <div class="deliver">
-      <div class="tile rates">
-        <div class="k mono">RATES</div>
-        <h3>Shared on request.</h3>
-        <p>Pricing depends on the deliverables, timeline and usage rights. Send a brief and I'll reply with a quote.</p>
-      </div>
-      <div class="tile">
-        <div class="k mono">WHAT I CAN DELIVER</div>
-        <ul>
-          <li><div><b>Dedicated reel</b><span>Your song or product, in my format</span></div></li>
-          <li><div><b>Story set</b><span>2–3 stories with a link sticker</span></div></li>
-          <li><div><b>Collab post</b><span>Shows up on both our profiles</span></div></li>
-          <li><div><b>Usage rights</b><span>For your page or ads, on request</span></div></li>
-        </ul>
+      <div class="terms">
+        <div>
+          <h3>What I can deliver</h3>
+          <ul class="deliver">
+            <li><b>Dedicated reel</b><span>Your song or product, in my format</span></li>
+            <li><b>Story set</b><span>2–3 stories with a link sticker</span></li>
+            <li><b>Collab post</b><span>Shows up on both our profiles</span></li>
+            <li><b>Usage rights</b><span>For your page or ads, on request</span></li>
+          </ul>
+        </div>
+        <div class="rates">
+          <h3>Rates</h3>
+          <p><b>Shared on request.</b>Pricing depends on the deliverables, timeline and usage rights. Send a brief and I'll reply with a quote.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
 <section class="contact" id="contact">
   <div class="wrap">
-    <div class="eyebrow">06 · Contact</div>
     <h2>Got a song or a product? Let's put it on.</h2>
     <p>The fastest way to reach me is a DM on Instagram.</p>
-    <div class="btn-row">
-      <a data-ig-dm href="#" target="_blank" rel="noopener" class="btn primary">DM @galelagja1
-        <svg class="i-out" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11l6-6M6 5h5v5"/></svg>
-      </a>
-      <a id="email-btn" href="#" class="btn ghost" hidden>Email me</a>
-      <button type="button" class="btn ghost no-print" onclick="window.print()">Save as PDF</button>
+    <div class="actions">
+      <a data-ig-dm href="#" target="_blank" rel="noopener" class="btn">DM @galelagja1</a>
+      <a id="email-btn" href="#" class="btn btn-line" hidden>Email me</a>
+      <button type="button" class="btn btn-line no-print" onclick="window.print()">Save as PDF</button>
     </div>
+    <footer class="foot">
+      <span>© 2026 galelagja</span>
+      <span id="foot-note"></span>
+    </footer>
   </div>
 </section>
-
-<footer>
-  <div class="wrap">
-    <span>© 2026 galelagja</span>
-    <span id="foot-note"></span>
-  </div>
-</footer>
 
 <script>
   // ---- Edit these to update the page ----
@@ -795,13 +577,7 @@
     if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e5 ? 0 : 1).replace(/\.0$/, "") + "K";
     return n.toLocaleString("en-US");
   }
-  const icon = {
-    play: '<svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>',
-    heart: '<svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M8 14s-6-3.6-6-8a3.2 3.2 0 0 1 6-1.6A3.2 3.2 0 0 1 14 6c0 4.4-6 8-6 8z"/></svg>',
-    out: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 11l6-6M6 5h5v5"/></svg>',
-  };
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   // ---- links ----
   document.querySelectorAll("[data-ig-profile]").forEach((a) => (a.href = `https://www.instagram.com/${CONFIG.handle}/`));
@@ -822,49 +598,30 @@
   const over100k = REELS.filter((r) => r.views >= 100000).length;
   const first = REELS[REELS.length - 1];
 
-  // value + how to print it, shared by the static text and the count-up
-  const counters = new Map([
-    [$("s-views"), [views, (v) => fmt(Math.round(v)) + "+"]],
-    [$("s-avg"), [avg, (v) => fmt(Math.round(v))]],
-    [$("s-eng"), [engagement, (v) => v.toFixed(1) + "%"]],
-    [$("s-100k"), [over100k, (v) => String(Math.round(v))]],
-    [$("s-likes"), [likes, (v) => fmt(Math.round(v)) + "+"]],
-    [$("s-reach"), [reach, (v) => Math.round(v) + "×"]],
-  ]);
-  counters.forEach(([to, render], el) => (el.textContent = render(to)));
-  $("s-views-d").textContent = `across ${REELS.length} reels, all posted since ${fmtMonth(first.date)}.`;
+  $("s-followers").textContent = CONFIG.followers.toLocaleString("en-US");
+  $("s-avg").textContent = fmt(avg);
+  $("bar-followers").style.setProperty("--r", CONFIG.followers / avg);
+  $("scale").setAttribute("aria-label", `${CONFIG.followers} followers compared with ${fmt(avg)} average views per reel, drawn to scale.`);
+  $("s-reach").textContent = `An average reel is seen by about ${reach} times as many people as follow the page.`;
+  $("s-views").textContent = fmt(views) + "+";
+  $("s-views-d").textContent = `across ${REELS.length} reels, all posted since ${fmtMonth(first.date)}`;
+  $("s-eng").textContent = engagement.toFixed(1) + "%";
+  $("s-100k").textContent = over100k;
   $("s-100k-d").textContent = `top one: ${fmt(byViews[0].views)} views`;
+  $("s-likes").textContent = fmt(likes) + "+";
   $("s-comments").textContent = `plus ${comments.toLocaleString("en-US")} comments`;
-  $("s-reach-d").innerHTML = `An average reel is seen by about <b>${reach} times my follower count</b> (${CONFIG.followers.toLocaleString("en-US")} followers). Instagram keeps pushing these reels to new people, so a collab reaches well beyond the people who already follow me.`;
   $("since-line").textContent = `Public numbers from my Instagram, collected on ${CONFIG.statsDate}.`;
   $("s-note").textContent = `Source: public Instagram counts on ${CONFIG.statsDate}. Instagram rounds likes on bigger reels (e.g. 34K), so totals are approximate.`;
   $("foot-note").textContent = `Stats as of ${CONFIG.statsDate}`;
 
-  function countUp(el) {
-    const [to, render] = counters.get(el);
-    const dur = 1200;
-    let t0;
-    const tick = (t) => {
-      t0 ??= t; // time from the first frame, so progress never goes negative
-      const p = Math.min(1, (t - t0) / dur);
-      el.textContent = render(p === 1 ? to : to * (1 - Math.pow(2, -10 * p))); // ease-out expo
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }
-
   // ---- top reels ----
   $("top-reels").innerHTML = byViews.slice(0, 6).map((r, i) => `
-    <a class="reel" href="${reelUrl(r)}" target="_blank" rel="noopener" aria-label="${esc(r.song)}: ${fmt(r.views)} views, opens on Instagram">
-      <img src="${cover(r)}" alt="" loading="lazy">
-      <span class="rank">#${i + 1}</span>
-      <span class="open">${icon.out}</span>
-      <span class="play">${icon.play}</span>
-      <div class="info">
-        <div class="song">${esc(r.song)}</div>
-        <div class="nums"><span>${icon.play} <b>${fmt(r.views)}</b></span><span>${icon.heart} <b>${fmt(r.likes)}</b></span></div>
-      </div>
-    </a>`).join("");
+    <li><a class="reel" href="${reelUrl(r)}" target="_blank" rel="noopener">
+      <span class="rank" aria-hidden="true">${i + 1}</span>
+      <span class="shot"><img src="${cover(r)}" alt="" loading="lazy"></span>
+      <span class="song">${esc(r.song)}</span>
+      <span class="views">${fmt(r.views)} views, ${fmt(r.likes)} likes</span>
+    </a></li>`).join("");
 
   // ---- tracklist ----
   const maxViews = byViews[0].views;
@@ -872,157 +629,71 @@
   function renderTracks(sort) {
     const list = sort === "views" ? byViews : REELS;
     tracksBox.innerHTML = `
-      <div class="track head"><span class="n">#</span><span></span><span>Song</span><span class="likes">Likes</span><span class="plays">Views</span></div>` +
+      <div class="track track-head" aria-hidden="true"><span class="n">#</span><span></span><span>Song</span><span class="likes">Likes</span><span class="plays">Views</span></div>` +
       list.map((r, i) => `
-      <a class="track" style="--i:${i}" href="${reelUrl(r)}" target="_blank" rel="noopener">
-        <span class="n"><span class="num">${i + 1}</span><span class="pl">${icon.play}</span></span>
+      <a class="track" href="${reelUrl(r)}" target="_blank" rel="noopener">
+        <span class="n">${i + 1}</span>
         <img src="${cover(r)}" alt="" loading="lazy">
-        <div><div class="t">${esc(r.song)}</div><div class="date">${fmtDate(r.date)}</div></div>
-        <span class="likes">${fmt(r.likes)}</span>
-        <div class="plays">${r.views.toLocaleString("en-US")}<div class="meter"><span style="width:${(r.views / maxViews * 100).toFixed(1)}%"></span></div></div>
+        <span><span class="t">${esc(r.song)}</span><span class="date">${fmtDate(r.date)}</span></span>
+        <span class="likes">${fmt(r.likes)}<span class="sr"> likes</span></span>
+        <span class="plays">${r.views.toLocaleString("en-US")}<span class="sr"> views</span><span class="meter"><i style="width:${(r.views / maxViews * 100).toFixed(1)}%"></i></span></span>
       </a>`).join("");
   }
-  function playRows() {
-    if (reduceMotion) return;
-    tracksBox.classList.remove("pre", "sorting");
-    void tracksBox.offsetWidth;
-    tracksBox.classList.add("sorting");
-    clearTimeout(playRows.t);
-    playRows.t = setTimeout(() => tracksBox.classList.remove("sorting"), 1600);
-  }
   const toggle = document.querySelector(".toggle");
-  function moveToggle() {
-    const b = toggle.querySelector('[aria-pressed="true"]');
-    toggle.style.setProperty("--x", b.offsetLeft + "px");
-    toggle.style.setProperty("--w", b.offsetWidth + "px");
-  }
   toggle.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
-    if (b.getAttribute("aria-pressed") === "true") return;
     toggle.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
-    moveToggle();
     renderTracks(b.dataset.sort);
-    playRows();
   }));
   renderTracks("date");
-  moveToggle();
-  toggle.classList.add("ready");
-  document.fonts?.ready.then(moveToggle);
-  addEventListener("resize", moveToggle);
 
-  // ---- now playing: the top 3 reels rotate like a deck ----
+  // ---- now playing: the top 3 reels take turns, driven by the progress bar ----
   const np = byViews.slice(0, 3);
-  const cards = [...document.querySelectorAll(".stack img")];
-  const bar = $("np-bar");
-  const POS = ["pos-c", "pos-r", "pos-l"];
-  let cur = 0;
-  cards.forEach((img, i) => {
-    img.src = cover(np[i]);
-    // start gathered behind the centre card, then fan out
-    img.classList.add("pos-c");
-    if (i !== cur) img.classList.add("dim", "behind");
-    img.addEventListener("click", () => (i === cur ? window.open(reelUrl(np[i]), "_blank", "noopener") : goTo(i)));
-  });
-  function layoutCards() {
-    cards.forEach((img, i) => {
-      const was = POS.find((c) => img.classList.contains(c));
-      const next = POS[(i - cur + 3) % 3];
-      const crossing = (was === "pos-l" && next === "pos-r") || (was === "pos-r" && next === "pos-l");
-      img.classList.remove(...POS, "dim", "behind");
-      img.classList.add(next);
-      if (crossing) { // slide across behind the centre card
-        img.classList.add("behind");
-        setTimeout(() => img.classList.remove("behind"), 800);
-      }
-    });
-  }
-  function swapText(el, text) {
-    el.textContent = text;
-    el.classList.remove("swap");
-    void el.offsetWidth;
-    el.classList.add("swap");
-  }
-  function showTrack() {
-    swapText($("np-title"), np[cur].song);
-    swapText($("np-meta"), `${fmt(np[cur].views)} views`);
-    if (reduceMotion) return;
+  np.forEach((r) => (new Image().src = cover(r)));
+  const bar = $("np-bar"), screen = $("np-link"), shot = $("np-img");
+  const npToggle = $("np-toggle");
+  const ICONS = { pause: "M3 1h3v12H3zM8 1h3v12H8z", play: "M3 1l9 6-9 6z" };
+  let cur = 0, playing = !reduceMotion;
+
+  function runBar() {
     bar.classList.remove("run");
     void bar.offsetWidth;
-    bar.classList.add("run");
+    if (!reduceMotion) bar.classList.add("run");
   }
-  function goTo(i) {
-    i = (i + 3) % 3;
-    if (i === cur) return;
-    cur = i;
-    layoutCards();
-    showTrack();
+  function show(i, animate = true) {
+    cur = (i + np.length) % np.length;
+    const r = np[cur];
+    shot.src = cover(r);
+    $("np-song").textContent = `“${r.song}”`;
+    $("np-meta").textContent = `${fmt(r.views)} views`;
+    screen.href = reelUrl(r);
+    screen.setAttribute("aria-label", `${r.song}: ${fmt(r.views)} views, opens on Instagram`);
+    if (animate && !reduceMotion) {
+      screen.classList.remove("swap");
+      void screen.offsetWidth;
+      screen.classList.add("swap");
+    }
+    runBar();
   }
-  bar.addEventListener("animationend", () => goTo(cur + 1)); // the progress bar drives the rotation
-  showTrack();
-  if (reduceMotion) layoutCards(); else setTimeout(layoutCards, 450);
-
-  // ---- hover: cursor glow on cards, tilt on reels ----
-  if (finePointer) {
-    document.addEventListener("pointermove", (e) => {
-      const el = e.target.closest?.(".tile, .trait, .fit, .reel");
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top;
-      el.style.setProperty("--mx", x + "px");
-      el.style.setProperty("--my", y + "px");
-      if (!reduceMotion && el.classList.contains("reel")) {
-        el.style.setProperty("--ry", (x / r.width - .5) * 10 + "deg");
-        el.style.setProperty("--rx", (.5 - y / r.height) * 10 + "deg");
-      }
-    }, { passive: true });
-    document.addEventListener("pointerout", (e) => {
-      const el = e.target.closest?.(".reel");
-      if (el && !el.contains(e.relatedTarget)) {
-        el.style.setProperty("--rx", "0deg");
-        el.style.setProperty("--ry", "0deg");
-      }
-    });
+  function setPlaying(on) {
+    playing = on;
+    bar.classList.toggle("still", !on);
+    npToggle.setAttribute("aria-label", on ? "Pause" : "Play");
+    npToggle.querySelector("path").setAttribute("d", on ? ICONS.pause : ICONS.play);
   }
+  bar.addEventListener("animationend", () => show(cur + 1));
+  npToggle.addEventListener("click", () => setPlaying(!playing));
+  $("np-next").addEventListener("click", () => show(cur + 1));
+  if (reduceMotion) { npToggle.hidden = true; bar.parentElement.hidden = true; }
+  show(0, false);
 
   // ---- nav: underline the section in view ----
-  const navLinks = [...document.querySelectorAll(".nav-links a:not(.btn)")];
+  const navLinks = [...document.querySelectorAll(".links a:not(.btn)")];
   const navFor = { numbers: "#numbers", reels: "#reels", tracklist: "#reels", format: "#format", collab: "#collab" };
   const spy = new IntersectionObserver((entries) => entries.forEach((e) => {
     if (!e.isIntersecting) return;
     navLinks.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === navFor[e.target.id]));
   }), { rootMargin: "-45% 0px -50% 0px" });
   document.querySelectorAll("header.hero, section").forEach((s) => spy.observe(s));
-
-  // ---- scroll reveal (content already on screen at load is left alone) ----
-  if (!reduceMotion) {
-    const fold = innerHeight * 0.9;
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      io.unobserve(el);
-      el.classList.add("in");
-      el.querySelectorAll(".v").forEach((v) => counters.has(v) && countUp(v));
-      const delay = parseFloat(el.style.getPropertyValue("--d")) || 0;
-      setTimeout(() => el.classList.remove("reveal", "in"), 750 + delay * 1000);
-    }), { rootMargin: "0px 0px -8% 0px" });
-    const perParent = new Map();
-    document.querySelectorAll(".section-head, .tile, .reel, .copy, .trait, .fit, .footnote, .contact .wrap > *").forEach((el) => {
-      if (el.getBoundingClientRect().top < fold) return;
-      const n = perParent.get(el.parentElement) || 0;
-      perParent.set(el.parentElement, n + 1);
-      el.style.setProperty("--d", Math.min(n, 5) * 0.07 + "s");
-      el.classList.add("reveal");
-      io.observe(el);
-    });
-    if (tracksBox.getBoundingClientRect().top >= fold) {
-      tracksBox.classList.add("pre");
-      const tio = new IntersectionObserver(([e]) => {
-        if (!e.isIntersecting) return;
-        tio.disconnect();
-        playRows();
-      }, { rootMargin: "0px 0px -8% 0px" });
-      tio.observe(tracksBox);
-    }
-  }
 </script>
 </body>
 </html>
